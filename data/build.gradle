@@ -1,0 +1,53 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 24
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    def dataDependencies = rootProject.ext.dataDependencies
+    def dataTestDependencies = rootProject.ext.dataTestDependencies
+    implementation dataDependencies.kotlin
+    implementation dataDependencies.rxJava
+    implementation dataDependencies.rxAndroid
+    // network
+    implementation dataDependencies.retrofit
+    implementation dataDependencies.retrofitGsonConverter
+    implementation dataDependencies.retrofitRxJava2Adapter
+    implementation dataDependencies.okhttpLogging
+    // database
+    implementation dataDependencies.room
+    kapt dataDependencies.roomCompiler
+    implementation dataDependencies.roomCommon
+    implementation dataDependencies.roomRxJava
+    // android architecture component
+    implementation dataDependencies.lifecycleExtensions
+    implementation dataDependencies.lifecycleCommon
+    implementation dataDependencies.reactiveStreams
+    implementation dataDependencies.pagingRuntime
+    implementation dataDependencies.pagingRxJava
+    implementation project(':domain')
+}

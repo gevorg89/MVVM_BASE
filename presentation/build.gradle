@@ -1,0 +1,86 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs'
+
+android {
+    dataBinding {
+        enabled = true
+    }
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 24
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+    androidExtensions {
+        experimental = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    def presentationDependencies = rootProject.ext.presentationDependencies
+    implementation presentationDependencies.kotlin
+    implementation project(':domain')
+
+    // android support libs
+    implementation presentationDependencies.material
+    implementation presentationDependencies.appCompat
+    implementation presentationDependencies.recyclerview
+    implementation presentationDependencies.annotation
+
+    // ui
+    implementation presentationDependencies.constraintLayout
+    implementation presentationDependencies.picasso
+    implementation presentationDependencies.navigationFragment
+    implementation presentationDependencies.navigationUi
+    implementation presentationDependencies.coreKtx
+    implementation presentationDependencies.fragmentKtx
+    implementation presentationDependencies.glide
+    implementation presentationDependencies.swipeToRefresh
+
+    // reactive
+    implementation presentationDependencies.rxJava
+    implementation presentationDependencies.rxAndroid
+    implementation presentationDependencies.reactiveStreams
+
+    // android architecture component
+    kapt presentationDependencies.lifecycleCompiler
+    implementation presentationDependencies.lifecycleRuntime
+    implementation presentationDependencies.lifecycleExtensions
+    implementation presentationDependencies.lifecycleCommon
+    implementation presentationDependencies.pagingRuntime
+
+    // dependency injection
+    implementation presentationDependencies.javaxInject
+    implementation presentationDependencies.dagger
+    implementation presentationDependencies.daggerAndroid
+    implementation presentationDependencies.daggerAndroidSupport
+    kapt presentationDependencies.daggerAndroidProcessor
+    annotationProcessor presentationDependencies.daggerCompiler
+    kapt presentationDependencies.daggerCompiler
+}
