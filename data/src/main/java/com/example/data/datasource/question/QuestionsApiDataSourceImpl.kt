@@ -9,5 +9,5 @@ import io.reactivex.Single
 class QuestionsApiDataSourceImpl(private val api: NetworkApi) : QuestionsApiDataSource {
     override fun getQuestions(page: Int, pageSize: Int): Single<List<Question>> =
         api.getQuestions(page, pageSize).applyIoScheduler()
-            .map { item -> item.questionItems.map { it.map() } }
+            .map { item -> item.map { it.map() } }
 }

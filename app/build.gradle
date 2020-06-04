@@ -33,7 +33,8 @@ android {
             applicationIdSuffix ".debug"
             versionNameSuffix "-DEBUG"
             signingConfig android.signingConfigs.debug
-            buildConfigField("String", "BASE_URL", "\"http://api.stackexchange.com\"")
+            //buildConfigField("String", "BASE_URL", "\"http://api.stackexchange.com\"")
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2\"")
         }
     }
 

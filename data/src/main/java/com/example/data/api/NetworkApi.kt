@@ -1,14 +1,16 @@
 package com.example.data.api
 
-import com.example.data.api.dto.QuestionItems
+import com.example.data.api.dto.Question
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NetworkApi {
-    @GET("/2.2/questions?order=desc&sort=activity&tagged=android&site=stackoverflow")
+    //?page=0&size=10&max=1000
+    @GET("/mvvm_android/")
     fun getQuestions(
         @Query("page") page: Int,
-        @Query("page_size") pageSize: Int
-    ): Single<QuestionItems>
+        @Query("size") size: Int,
+        @Query("max") max: Int = 1000
+    ): Single<List<Question>>
 }
