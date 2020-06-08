@@ -17,5 +17,5 @@ class GetQuestionsUseCaseImpl(
     override fun deleteQuestion(question: Question) =
         repository.deleteQuestion(question).compose(transformerSingle)
 
-    override fun trancate(callback: () -> Unit)  = repository.trancate(callback)
+    override fun trancate(callback: () -> Unit) = repository.trancate(callback)
 }

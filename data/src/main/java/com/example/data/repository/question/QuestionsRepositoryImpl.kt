@@ -20,19 +20,20 @@ class QuestionsRepositoryImpl(
     override fun getQuestions(): Flowable<ResultState<PagedList<Question>>> {
         val dataSourceFactory = databaseSource.getQuestions()
         val boundaryCallback = RepoBoundaryCallback(apiSource, databaseSource)
-        val config = PagedList.Config.Builder()
+        /*val config = PagedList.Config.Builder()
             .setPrefetchDistance(DATABASE_PAGE_SIZE)
             .setInitialLoadSizeHint(DATABASE_PAGE_SIZE)
-            .setPageSize(DATABASE_PAGE_SIZE).build()
+            .setPageSize(DATABASE_PAGE_SIZE).build()*/
         val data = RxPagedListBuilder(dataSourceFactory, DATABASE_PAGE_SIZE)
             .setBoundaryCallback(boundaryCallback)
             .buildFlowable(BackpressureStrategy.BUFFER)
+        val networkErrors = boundaryCallback.networkErrors
         return data
             .applyIoScheduler()
             .map { d ->
                 when (d.isNotEmpty()) {
                     true -> ResultState.Success(d)
-                    false -> ResultState.Loading(d)
+                    false -> ResultState.Loading(d, networkErrors)
                 }
             }
             .onErrorReturn { e -> ResultState.Error(e, null) }

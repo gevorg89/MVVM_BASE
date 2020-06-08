@@ -16,10 +16,10 @@ class RepoBoundaryCallback(
 
     // keep the last requested page. When the request is successful, increment the page number.
     private var lastRequestedPage = 0
-    private val _networkErrors = MutableLiveData<String>()
+    private val _networkErrors = MutableLiveData<Throwable>()
 
     // LiveData of network errors.
-    val networkErrors: LiveData<String>
+    val networkErrors: LiveData<Throwable>
         get() = _networkErrors
 
     // avoid triggering multiple requests in the same time
@@ -56,7 +56,7 @@ class RepoBoundaryCallback(
                     }
                 }
                 is ResultState.Error -> {
-                    _networkErrors.postValue(questions.throwable.message)
+                    _networkErrors.postValue(questions.throwable)
                     isRequestInProgress = false
                 }
             }

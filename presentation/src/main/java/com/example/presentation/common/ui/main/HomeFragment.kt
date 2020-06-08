@@ -40,6 +40,7 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         observe(viewModel.questionsLiveData, ::showQuestions)
+        observe(viewModel.networkErrors, ::networkError)
         viewModel.getQuestions()
     }
 
@@ -55,6 +56,10 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+    private fun networkError(throwable: Throwable?) {
+        Toast.makeText(activity, throwable?.message, Toast.LENGTH_SHORT).show()
+    }
+
     private fun showDetail(question: Question?) {
         question?.let {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToQuestionDetailFragment())
@@ -64,11 +69,9 @@ class HomeFragment : BaseFragment() {
     private fun showQuestions(questions: ResultState<PagedList<Question>>) {
         when (questions) {
             is ResultState.Success -> {
-                swipeToRefresh.isRefreshing = false
                 adapter.submitList(questions.data)
             }
             is ResultState.Error -> {
-                swipeToRefresh.isRefreshing = false
                 Toast.makeText(activity, questions.throwable.message, Toast.LENGTH_SHORT).show()
                 adapter.submitList(questions.data)
             }
@@ -76,5 +79,6 @@ class HomeFragment : BaseFragment() {
                 adapter.submitList(questions.data)
             }
         }
+        swipeToRefresh.isRefreshing = false
     }
 }

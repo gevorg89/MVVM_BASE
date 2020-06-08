@@ -45,6 +45,11 @@ class HomeViewModel @Inject constructor(private val getQuestionsUseCase: GetQues
             }
         }
 
+    val networkErrors: LiveData<Throwable> =
+        Transformations.switchMap(questionsLiveData) { resultState ->
+            resultState.networkError
+        }
+
     fun getQuestions() {
         fetch.postValue("")
     }
