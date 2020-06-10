@@ -41,6 +41,7 @@ class HomeFragment : BaseFragment() {
         initView()
         observe(viewModel.questionsLiveData, ::showQuestions)
         observe(viewModel.networkErrors, ::networkError)
+        observe(viewModel.processLoading, ::processLoading)
         viewModel.getQuestions()
     }
 
@@ -56,7 +57,12 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+    private fun processLoading(loading: Boolean) {
+        swipeToRefresh.isRefreshing = loading
+    }
+
     private fun networkError(throwable: Throwable?) {
+        swipeToRefresh.isRefreshing = false
         Toast.makeText(activity, throwable?.message, Toast.LENGTH_SHORT).show()
     }
 
@@ -70,15 +76,16 @@ class HomeFragment : BaseFragment() {
         when (questions) {
             is ResultState.Success -> {
                 adapter.submitList(questions.data)
+                swipeToRefresh.isRefreshing = false
             }
             is ResultState.Error -> {
                 Toast.makeText(activity, questions.throwable.message, Toast.LENGTH_SHORT).show()
                 adapter.submitList(questions.data)
+                swipeToRefresh.isRefreshing = false
             }
             is ResultState.Loading -> {
                 adapter.submitList(questions.data)
             }
         }
-        swipeToRefresh.isRefreshing = false
     }
 }

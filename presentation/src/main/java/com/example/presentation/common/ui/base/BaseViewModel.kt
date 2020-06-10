@@ -15,6 +15,10 @@ open class BaseViewModel : ViewModel() {
         mDisposables.add(this)
     }
 
+    protected fun Disposable.delete() {
+        mDisposables.remove(this)
+    }
+
     override fun onCleared() {
         mDisposables.clear()
         super.onCleared()
